@@ -28,7 +28,7 @@ func NewStepBuilderFile(pipelineSchema schema.PipelineSchema) string {
 
 func NewStepBuilder() *stepBuilder {
 	return &stepBuilder{}
-}`, "`yaml:\"steps\"`"))
+}`, "`json:\"steps\"`"))
 
 	for name, step := range pipelineSchema.Steps {
 		goStruct := NewStructFromStep(name, step, pipelineSchema.Types)

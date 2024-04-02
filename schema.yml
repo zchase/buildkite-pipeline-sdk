@@ -432,12 +432,16 @@ types:
   retry_options:
     description: |
       The conditions for retrying this step.
-    type: enum
-    items:
-      type: string
-      values:
-        - automatic
-        - manual
+    type: object
+    properties:
+      automatic:
+        type: boolean
+        description: |
+          Whether to allow a job to retry automatically. This field accepts a boolean value, individual retry conditions, or a list of multiple different retry conditions.
+      manual:
+        type: boolean
+        description: |
+          Whether to allow a job to be retried manually. This field accepts a boolean value, or a single retry condition.
   string_record:
     description: |
       A generic string map.
