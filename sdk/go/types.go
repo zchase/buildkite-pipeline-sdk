@@ -6,11 +6,11 @@ package buildkite
 type SoftFailOption map[string]int
 
 type RetryOptions struct {
-    // Whether to allow a job to be retried manually. This field accepts a boolean value, or a single retry condition.
-    Manual bool `json:"manual,omitempty"`
-
     // Whether to allow a job to retry automatically. This field accepts a boolean value, individual retry conditions, or a list of multiple different retry conditions.
     Automatic bool `json:"automatic,omitempty"`
+
+    // Whether to allow a job to be retried manually. This field accepts a boolean value, or a single retry condition.
+    Manual bool `json:"manual,omitempty"`
 
 }
 // A generic string map.
