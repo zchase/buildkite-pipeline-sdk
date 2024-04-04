@@ -13,6 +13,7 @@ package buildkite
 
 import (
 	"os"
+	"strings"
 )
 
 type environment struct{}`
@@ -22,9 +23,15 @@ func NewEnvironmentFile(envs map[schema.PropertyName]schema.EnvironmentVariable)
 
 	methods := utils.CodeBlock{}
 	for name, env := range envs {
-		methodBody := utils.CodeBlock{
-			fmt.Sprintf(`str := os.Getenv("%s")`, name),
+		codeBlock := fmt.Sprintf(`str := os.Getenv("%s")`, name)
+		if env.Dynamic {
+			codeBlock = fmt.Sprintf("%s\n%s\n",
+				"envKey := strings.ToUpper(strings.Join(strs, \"_\"))",
+				"str := os.Getenv(envKey)",
+			)
 		}
+
+		methodBody := utils.CodeBlock{codeBlock}
 
 		var returnType string
 		switch env.Type {
@@ -51,9 +58,14 @@ func NewEnvironmentFile(envs map[schema.PropertyName]schema.EnvironmentVariable)
 			methodBody = append(methodBody, "return str")
 		}
 
+		dynamicArgs := ""
+		if env.Dynamic {
+			dynamicArgs = "strs ...string"
+		}
+
 		methods = append(methods, fmt.Sprintf("%s\n%s\n%s\n%s\n",
 			utils.NewCodeComment(env.Description, 0),
-			fmt.Sprintf("func (e environment) %s() %s {", env.TitleCase(string(name)), returnType),
+			fmt.Sprintf("func (e environment) %s(%s) %s {", env.TitleCase(string(name)), dynamicArgs, returnType),
 			methodBody.DisplayIndent(4),
 			"}",
 		))

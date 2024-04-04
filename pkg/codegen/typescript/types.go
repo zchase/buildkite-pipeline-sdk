@@ -53,7 +53,7 @@ func newInterfaceFromSchemaType(name schema.PropertyName, prop schema.Property, 
 
 	var properties []string
 	for n, p := range prop.Properties {
-		propType := prop.TypeScriptType(name, types)
+		propType := p.TypeScriptType(n, types)
 
 		var ok bool
 		if prop.TypeRef != "" {

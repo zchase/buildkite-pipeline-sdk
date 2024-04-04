@@ -6,6 +6,20 @@ import (
 	"github.com/zchase/buildkite-pipeline-sdk/pkg/utils"
 )
 
+// new playground
+type SchemaType string
+
+const (
+	schemaString  SchemaType = "string"
+	schemaNumber  SchemaType = "number"
+	schemaBoolean SchemaType = "boolean"
+	schemaArray   SchemaType = "array"
+	schemaObject  SchemaType = "object"
+	schemaEnum    SchemaType = "enum"
+)
+
+// end playground
+
 type PropertyName string
 
 func (p PropertyName) TitleCase() string {
@@ -18,7 +32,7 @@ func (p PropertyName) CamelCase() string {
 
 type ObjectArrayProperty struct {
 	TypeRef   PropertyName `yaml:"$types"`
-	Type      string       `yaml:"type"`
+	Type      SchemaType   `yaml:"type"`
 	Delimiter string       `yaml:"delimiter"`
 	Values    []string     `yaml:"values"`
 
@@ -29,9 +43,17 @@ type ObjectArrayProperty struct {
 
 type PropertyMap map[PropertyName]Property
 
+func NewPropertyMap(propertyMap map[string]Property) map[PropertyName]Property {
+	result := make(map[PropertyName]Property, len(propertyMap))
+	for key, prop := range propertyMap {
+		result[PropertyName(key)] = prop
+	}
+	return result
+}
+
 type Property struct {
 	Description string                    `yaml:"description"`
-	Type        string                    `yaml:"type"`
+	Type        SchemaType                `yaml:"type"`
 	Items       ObjectArrayProperty       `yaml:"items"`
 	Properties  map[PropertyName]Property `yaml:"properties"`
 	Required    bool                      `yaml:"required"`

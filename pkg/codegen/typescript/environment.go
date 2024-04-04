@@ -12,33 +12,43 @@ func NewEnvironmentFile(envs map[schema.PropertyName]schema.EnvironmentVariable)
 	file.code = append(file.code, "class Environment {")
 
 	for name, env := range envs {
+		envKey := fmt.Sprintf("process.env.%s", name)
+		if env.Dynamic {
+			envKey = "process.env[strs.join(\"_\").toUpperCase()]"
+		}
+
 		var returnStatement string
 		returnType := env.Type
 		switch env.Type {
 		case "boolean":
-			returnStatement = fmt.Sprintf("return Boolean(process.env.%s)", name)
+			returnStatement = fmt.Sprintf("return Boolean(%s)", envKey)
 		case "number":
-			returnStatement = fmt.Sprintf("return Number(process.env.%s)", name)
+			returnStatement = fmt.Sprintf("return Number(%s)", envKey)
 		case "array":
 			switch env.Items.Type {
 			case "boolean":
 				returnType = "boolean[]"
-				returnStatement = fmt.Sprintf("return process.env.%s.split(\"%s\").map(v => Boolean(v))", name, env.Items.Delimiter)
+				returnStatement = fmt.Sprintf("return %s.split(\"%s\").map(v => Boolean(v))", envKey, env.Items.Delimiter)
 			case "number":
 				returnType = "number[]"
-				returnStatement = fmt.Sprintf("return process.env.%s.split(\"%s\").map(v => Number(v))", name, env.Items.Delimiter)
+				returnStatement = fmt.Sprintf("return %s.split(\"%s\").map(v => Number(v))", envKey, env.Items.Delimiter)
 			default:
 				returnType = "string[]"
-				returnStatement = fmt.Sprintf("return process.env.%s.split(\"%s\")", name, env.Items.Delimiter)
+				returnStatement = fmt.Sprintf("return %s.split(\"%s\")", envKey, env.Items.Delimiter)
 			}
 		default:
-			returnStatement = fmt.Sprintf("return process.env.%s", name)
+			returnStatement = fmt.Sprintf("return %s", envKey)
+		}
+
+		dynamicArgs := ""
+		if env.Dynamic {
+			dynamicArgs = "...strs: string[]"
 		}
 
 		block := utils.CodeBlock{
 			utils.NewCodeComment(env.Description, 0),
-			fmt.Sprintf("public %s(): %s {", env.CamelCase(string(name)), returnType),
-			fmt.Sprintf("    %s", returnStatement),
+			fmt.Sprintf("public %s(%s): %s {", env.CamelCase(string(name)), dynamicArgs, returnType),
+			fmt.Sprintf("    %s;", returnStatement),
 			"}",
 		}
 

@@ -9,12 +9,7 @@ import (
 )
 
 func run() error {
-	pipelineSchema, err := schema.ReadSchema()
-	if err != nil {
-		return err
-	}
-
-	err = codegen.GenerateSDKs(pipelineSchema)
+	err := codegen.GenerateSDKs(schema.Schema)
 	if err != nil {
 		return err
 	}

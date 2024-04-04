@@ -1,8 +1,10 @@
 # Buildkite Pipeline SDK
 
-This is an experimental approach to generating SDKs for defining [Buildkite Dynamic Pipelines](https://buildkite.com/docs/pipelines/defining-steps#dynamic-pipelines) from a YAML schema.
+This is an experimental approach to generating SDKs for defining [Buildkite Dynamic Pipelines](https://buildkite.com/docs/pipelines/defining-steps#dynamic-pipelines) from a schema.
 
 The purpose of this repo is to demonstrate the technique and provide simple examples. You should not use the code in this repo for any sort of production use.
+
+The schema is defined in `/pkg/schema/schema.go`.
 
 ## Usage
 

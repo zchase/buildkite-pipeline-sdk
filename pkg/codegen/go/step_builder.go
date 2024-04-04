@@ -21,7 +21,7 @@ func newStepBuilderMethod(name schema.PropertyName, step schema.Step) string {
 
 func NewStepBuilderFile(pipelineSchema schema.PipelineSchema) string {
 	file := NewFile()
-	file.imports.AddImports("encoding/json", "fmt")
+	file.imports.AddImports("encoding/json", "os")
 	file.code = append(file.code, fmt.Sprintf(`type stepBuilder struct {
 	Steps []interface{} %s
 }
@@ -43,7 +43,7 @@ func NewStepBuilder() *stepBuilder {
 		"	    return err",
 		"	}",
 		"",
-		"    return os.WriteFile(\"pipeline.json\", str, os.ModePerm)",
+		"    return os.WriteFile(\"pipeline.json\", jsonBytes, os.ModePerm)",
 		"}",
 	))
 
