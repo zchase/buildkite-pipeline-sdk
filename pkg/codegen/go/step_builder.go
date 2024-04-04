@@ -36,15 +36,14 @@ func NewStepBuilder() *stepBuilder {
 		file.code = append(file.code, newStepBuilderMethod(name, step))
 	}
 
-	file.code = append(file.code, fmt.Sprintf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
+	file.code = append(file.code, fmt.Sprintf("%s\n%s\n%s\n%s\n%s\n%s\n%s\n%s\n",
 		"func (s *stepBuilder) Print() error {",
 		`	jsonBytes, err := json.MarshalIndent(s, "", "\t")`,
 		"	if err != nil {",
 		"	    return err",
 		"	}",
 		"",
-		"    fmt.Println(string(jsonBytes))",
-		"    return nil",
+		"    return os.WriteFile(\"pipeline.json\", str, os.ModePerm)",
 		"}",
 	))
 

@@ -1,9 +1,8 @@
-import * as bk from "buildkite-pipline-sdk";
-import * as fs from "fs";
+import * as bk from "buildkite-pipeline-sdk";
 
 let pipeline = bk.stepBuilder
     .addCommandStep({
-        commands: [ "echo \"Hello World!\"" ],
+        commands: [ `echo "Hello World!"` ],
     });
 
 const branchName = bk.environment.branch();
@@ -17,4 +16,4 @@ if (branchName === "main") {
     })
 }
 
-fs.writeFileSync("pipeline.json", JSON.stringify(pipeline.write(), null, 4));
+pipeline.write();

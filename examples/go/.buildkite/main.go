@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"os"
 
@@ -35,12 +34,7 @@ func run() error {
 		})
 	}
 
-	str, err := json.Marshal(pipeline)
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile("pipeline.json", str, os.ModePerm)
+	return pipeline.Print()
 }
 
 func main() {

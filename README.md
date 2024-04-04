@@ -24,7 +24,6 @@ To try out the SDKs you can create a new project and use the files in the `examp
 
 ```typescript
 import * as bk from "buildkite-pipline-sdk";
-import * as fs from "fs";
 
 let pipeline = bk.stepBuilder
     .addCommandStep({
@@ -42,7 +41,7 @@ if (branchName === "main") {
     })
 }
 
-fs.writeFileSync("pipeline.json", JSON.stringify(pipeline.write(), null, 4));
+pipeline.write();
 ```
 
 ## Go Example
@@ -51,9 +50,7 @@ fs.writeFileSync("pipeline.json", JSON.stringify(pipeline.write(), null, 4));
 package main
 
 import (
-	"encoding/json"
 	"fmt"
-	"os"
 
 	bk "github.com/zchase/buildkite-pipeline-sdk/sdk/go"
 )
@@ -85,12 +82,7 @@ func run() error {
 		})
 	}
 
-	str, err := json.Marshal(pipeline)
-	if err != nil {
-		return err
-	}
-
-	return os.WriteFile("pipeline.json", str, os.ModePerm)
+	return pipeline.Print()
 }
 
 func main() {

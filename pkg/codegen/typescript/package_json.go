@@ -17,7 +17,7 @@ type typescriptPackageJSON struct {
 func NewPackageJSONFile() string {
 	// Write package.json
 	packageJSON := typescriptPackageJSON{
-		Name:        "buildkite-pipline-sdk",
+		Name:        "buildkite-pipeline-sdk",
 		Version:     "0.0.1",
 		Description: "",
 		Main:        "index.ts",

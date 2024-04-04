@@ -7,13 +7,14 @@ import (
 	"github.com/zchase/buildkite-pipeline-sdk/pkg/utils"
 )
 
-var stepBuilderCode = `%s
+var stepBuilderCode = `import * as fs from "fs";
+%s
 
 class StepBuilder {
 	private steps: any[] = [];
 
 	public write() {
-		console.log(JSON.stringify({ steps: this.steps }, null, 4));
+		fs.writeFileSync("pipeline.json", JSON.stringify({ steps: this.steps }, null, 4));
 	}`
 
 func NewStepBuilderFile(pipelineSchema schema.PipelineSchema) string {

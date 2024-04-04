@@ -5,7 +5,7 @@ set -eo pipefail
 echo "--- :pipeline: generating pipeline"
 cd .buildkite
 npm install
-npm link buildkite-pipline-sdk
+npm link buildkite-pipeline-sdk
 npm run build
 
 echo "--- :pipeline_upload: uploading pipeline.json"
